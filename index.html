@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>tensorflow js sample</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"> </script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.1.1"> </script>
+  <style>
+    .container {
+      display: grid;
+      grid-auto-flow: row;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .container img {
+      width: 200px;
+    }
+    .container ul {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <img id="cat1" src="./cat1.jpg" alt="">
+      <ul id="result1"></ul>
+    </div>
+    <div>
+      <img id="cat2" src="./cat2.jpg" alt="">
+      <ul id="result2"></ul>
+    </div>
+    <div>
+      <img id="cat3" src="./cat3.jpg" alt="">
+      <ul id="result3"></ul>
+    </div>
+    <div>
+      <img id="dog1" src="./dog1.jpg" alt="">
+      <ul id="result4"></ul>
+    </div>
+    <div>
+      <img id="dog2" src="./dog2.jpg" alt="">
+      <ul id="result5"></ul>
+    </div>
+    <div>
+      <img id="dog3" src="./dog3.jpg" alt="">
+      <ul id="result6"></ul>
+    </div>
+  </div>
+
+  <script>
+    const cat1 = document.getElementById('cat1');
+    const result1 = document.getElementById('result1');
+
+    const cat2 = document.getElementById('cat2');
+    const result2 = document.getElementById('result2');
+
+    const cat3 = document.getElementById('cat3');
+    const result3 = document.getElementById('result3');
+
+    const dog1 = document.getElementById('dog1');
+    const result4 = document.getElementById('result4');
+
+    const dog2 = document.getElementById('dog2');
+    const result5 = document.getElementById('result5');
+
+    const dog3 = document.getElementById('dog3');
+    const result6 = document.getElementById('result6');
+
+    mobilenet.load().then(model => {
+      predictions(model, cat1, result1);
+      predictions(model, cat2, result2);
+      predictions(model, cat3, result3);
+      predictions(model, dog1, result4);
+      predictions(model, dog2, result5);
+      predictions(model, dog3, result6);
+    });
+
+    function predictions(model, target, result) {
+      model.classify(target).then(predictions => {
+        predictions.forEach(({ className, probability }) => {
+          const li = document.createElement('li');
+          li.innerText = `${className}: ${probability.toFixed(3)}`;
+          result.appendChild(li);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
